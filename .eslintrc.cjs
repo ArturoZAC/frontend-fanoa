@@ -35,6 +35,7 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/promise-function-async": "off",
+    "no-trailing-spaces": "off"
     eqeqeq: "off",
   },
 };

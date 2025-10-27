@@ -10,9 +10,6 @@ import { ImageUploaderCustom } from "./components/ImageUploaderCustom";
 import type { ServicioCategoriaResponse } from "./interfaces/servicio-cateogira.response";
 import { getServicioCategoriaById } from "./actions/getServicioCategoriaById.action";
 import { updateServicioCategoria } from "./actions/updateServicioCategoria.action";
-import { getEnvs } from "../../../../helper/getEnvs";
-
-const { VITE_API_DEFAULT } = getEnvs();
 
 export const EditarServicioCategoria = (): JSX.Element => {
   const { id } = useParams<{ id: string }>();
@@ -153,7 +150,7 @@ export const EditarServicioCategoria = (): JSX.Element => {
             setFile(newFile);
             formik.setFieldValue("imagen", newFile);
           }}
-          defaultImage={`${VITE_API_DEFAULT}/uploads/servicio_categoria/${initialData.imagen}`}
+          defaultImage={initialData.imagen}
         />
       </div>
 

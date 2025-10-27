@@ -1,62 +1,67 @@
+// src/components/private/tables/proyectos/ListaProyectos.tsx
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
-import type { ServicioCategoriaResponse } from "./interfaces/servicio-cateogira.response";
-import { getAllServicioCategoria } from "./actions/getAllServiciosCategorias.action";
-import { deleteServicioCategoria } from "./actions/deleteServicioCategoria.action";
+import "@szhsin/react-menu/dist/index.css";
 
-export const ListaServicioCategoria = (): JSX.Element => {
-  const navigate = useNavigate();
+import { TopControls } from "../shared/TopControls";
+import { getAllProjectsByCategoryIdAction } from "./actions/getAllProjectsByCategoryId.action";
+import type { ProyectoResponse } from "./interfaces/project.response";
+
+export const ListaProyectos = (): JSX.Element => {
   const [totalRegistros, setTotalRegistros] = useState(0);
-  const [serviciosCategorias, setServiciosCategorias] = useState<ServicioCategoriaResponse[]>([]);
+  const [proyectos, setProyectos] = useState<ProyectoResponse[]>([]);
   const [loadingComponents, setLoadingComponents] = useState(false);
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<string>("");
 
-  const getAllProductos = async () => {
+  const fetchProyectos = async (categoriaId: string) => {
     setLoadingComponents(true);
-    const data = await getAllServicioCategoria();
-    setServiciosCategorias(data);
-    setTotalRegistros(data.length);
-    setLoadingComponents(false);
-  };
-
-  const handleDelete = async (id: string) => {
-    const confirmar = window.confirm("¿Seguro que deseas eliminar esta categoría?");
-    if (!confirmar) return;
-
     try {
-      await deleteServicioCategoria(id);
-      setServiciosCategorias((prev) => prev.filter((item) => item.id !== id));
-      setTotalRegistros((prev) => prev - 1);
-      alert("Categoría eliminada correctamente ✅");
+      if (categoriaId && categoriaId !== "") {
+        const data = await getAllProjectsByCategoryIdAction(categoriaId);
+        setProyectos(data);
+        setTotalRegistros(data.length);
+      } else {
+        const data = await getAllProjectsByCategoryIdAction("");
+        setProyectos(data);
+        setTotalRegistros(data.length);
+      }
     } catch (error) {
-      console.error("Error al eliminar:", error);
-      alert("❌ Error al eliminar la categoría");
+      console.error("Error cargando proyectos:", error);
+      setProyectos([]);
+      setTotalRegistros(0);
+    } finally {
+      setLoadingComponents(false);
     }
   };
 
   useEffect(() => {
-    getAllProductos();
+    fetchProyectos(categoriaSeleccionada);
   }, []);
+
+  useEffect(() => {
+    fetchProyectos(categoriaSeleccionada);
+  }, [categoriaSeleccionada]);
+
+  const handleDelete = (id: string) => {
+    const confirmar = window.confirm("¿Seguro que deseas eliminar este proyecto?");
+    if (!confirmar) return;
+
+    setProyectos((prev) => prev.filter((item) => item.id !== id));
+    setTotalRegistros((prev) => prev - 1);
+    alert("Proyecto eliminado correctamente ✅");
+  };
 
   return (
     <>
-      <div className="flex flex-col mb-5 md:flex-row md:items-center md:justify-between gap-y-4">
-        <div className="flex flex-col items-center justify-between w-full gap-4 lg:flex-row lg:justify-end">
-          <button
-            onClick={() => navigate("agregar")}
-            className="flex items-center justify-center w-full gap-2 px-4 py-2 text-white transition-colors rounded-lg bg-main hover:bg-main lg:w-fit"
-          >
-            Crear
-          </button>
-        </div>
-      </div>
+      <TopControls onCategoriaChange={(id) => setCategoriaSeleccionada(id)} />
 
       {loadingComponents ? (
-        <div>Cargando...</div>
+        <div className="text-center py-8 text-gray-400">Cargando proyectos...</div>
       ) : (
         <div className="p-8 bg-secondary-100 rounded-xl">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {serviciosCategorias.map((pro: any) => (
+            {proyectos.map((pro) => (
               <div
                 className="overflow-hidden transition-transform bg-secondary-900 rounded-xl hover:scale-105"
                 key={pro.id}
@@ -109,7 +114,7 @@ export const ListaServicioCategoria = (): JSX.Element => {
           </div>
 
           <div className="flex flex-col justify-between gap-5 mt-8 md:flex-row md:gap-0 content_buttons">
-            <p className="ml-1 text-md">{totalRegistros} Registros</p>
+            <p className="ml-1 text-md">{totalRegistros} Proyectos</p>
           </div>
         </div>
       )}

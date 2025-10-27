@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -15,15 +15,14 @@ const ServicioCategoriaSchema = Yup.object().shape({
   subtitulo: Yup.string().required("El subtítulo es obligatorio"),
   descripcion: Yup.string().required("La descripción es obligatoria"),
   miniTitulo: Yup.string().required("El título secundario es obligatorio"),
-  miniDescripcion: Yup.string().required(
-    "La descripción secundaria es obligatoria"
-  ),
+  miniDescripcion: Yup.string().required("La descripción secundaria es obligatoria"),
   imagen: Yup.mixed().required("La imagen es obligatoria"),
 });
 
 export const CrearServicioCategoria = (): JSX.Element => {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -55,15 +54,13 @@ export const CrearServicioCategoria = (): JSX.Element => {
         console.error("Error al enviar formulario:", error);
       } finally {
         setLoading(false);
+        navigate(-1);
       }
     },
   });
 
   return (
-    <form
-      className="p-8 bg-secondary-100 rounded-xl"
-      onSubmit={formik.handleSubmit}
-    >
+    <form className="p-8 bg-secondary-100 rounded-xl" onSubmit={formik.handleSubmit}>
       <div className="flex flex-col gap-4 mb-5">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="w-full">
@@ -75,10 +72,7 @@ export const CrearServicioCategoria = (): JSX.Element => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
-            <Errors
-              errors={formik.errors.titulo}
-              touched={formik.touched.titulo}
-            />
+            <Errors errors={formik.errors.titulo} touched={formik.touched.titulo} />
           </div>
 
           <div className="w-full">
@@ -90,10 +84,7 @@ export const CrearServicioCategoria = (): JSX.Element => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
-            <Errors
-              errors={formik.errors.subtitulo}
-              touched={formik.touched.subtitulo}
-            />
+            <Errors errors={formik.errors.subtitulo} touched={formik.touched.subtitulo} />
           </div>
         </div>
 
@@ -106,10 +97,7 @@ export const CrearServicioCategoria = (): JSX.Element => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
-          <Errors
-            errors={formik.errors.descripcion}
-            touched={formik.touched.descripcion}
-          />
+          <Errors errors={formik.errors.descripcion} touched={formik.touched.descripcion} />
         </div>
 
         <div className="w-full">
@@ -121,10 +109,7 @@ export const CrearServicioCategoria = (): JSX.Element => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
-          <Errors
-            errors={formik.errors.miniTitulo}
-            touched={formik.touched.miniTitulo}
-          />
+          <Errors errors={formik.errors.miniTitulo} touched={formik.touched.miniTitulo} />
         </div>
 
         <div className="w-full">
@@ -136,10 +121,7 @@ export const CrearServicioCategoria = (): JSX.Element => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
-          <Errors
-            errors={formik.errors.miniDescripcion}
-            touched={formik.touched.miniDescripcion}
-          />
+          <Errors errors={formik.errors.miniDescripcion} touched={formik.touched.miniDescripcion} />
         </div>
 
         <ImageUploaderCustom

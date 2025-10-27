@@ -13,6 +13,9 @@ import { ListaServicioCategoria } from "../components/private/tables/servicios-c
 import { CrearServicioCategoria } from "../components/private/tables/servicios-categoria/CrearServicioCategoria";
 import { EditarServicioCategoria } from "../components/private/tables/servicios-categoria/EditorServicioCategoria";
 
+import { ListaProyectos } from "../components/private/tables/admin/proyectos/ListaProyectos";
+import { CrearProyecto } from "../components/private/tables/admin/proyectos/CrearProyecto";
+
 export const Routing = (): JSX.Element => {
   return (
     <BrowserRouter>
@@ -29,18 +32,12 @@ export const Routing = (): JSX.Element => {
             <Route path="galeria/agregar" element={<CrearServicio />} />
             <Route path="galeria/editar/:id" element={<EditarServicio />} />
 
-            <Route
-              path="servicios-categoria"
-              element={<ListaServicioCategoria />}
-            />
-            <Route
-              path="servicios-categoria/agregar"
-              element={<CrearServicioCategoria />}
-            />
-            <Route
-              path="servicios-categoria/editar/:id"
-              element={<EditarServicioCategoria />}
-            />
+            <Route path="servicios-categoria" element={<ListaServicioCategoria />} />
+            <Route path="servicios-categoria/agregar" element={<CrearServicioCategoria />} />
+            <Route path="servicios-categoria/editar/:id" element={<EditarServicioCategoria />} />
+
+            <Route path="proyectos" element={<ListaProyectos />} />
+            <Route path="proyectos/agregar/:id" element={<CrearProyecto />} />
 
             {/* CONFIGURACION */}
             <Route path="contacto/:id" element={<EditarContacto />} />

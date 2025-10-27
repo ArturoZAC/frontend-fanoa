@@ -10,12 +10,7 @@ import type { ServicioCategoriaResponse } from "../interfaces/servicio-cateogira
 //   miniDescripcion: string;
 // }
 
-export const postServicioCategoria = async (
-  data: FormData
-): Promise<ServicioCategoriaResponse> => {
-  const response = await adminApi.post<ServicioCategoriaResponse>(
-    "/scategorias",
-    data
-  );
+export const postServicioCategoria = async (data: FormData): Promise<ServicioCategoriaResponse> => {
+  const response = await adminApi.post<ServicioCategoriaResponse>("/scategorias", data);
   return response.data;
 };
