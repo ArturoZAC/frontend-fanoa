@@ -1,52 +1,29 @@
-import { useState } from 'react'
+import { useState } from "react";
 
-import { Link, useNavigate } from 'react-router-dom'
-import useAuth from '../../../hooks/useAuth'
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../../../hooks/useAuth";
 // Icons
-import {
-  RiLogoutCircleRLine,
-  RiMenu3Line,
-  RiCloseLine,
-  RiStackFill
-} from 'react-icons/ri'
+import { RiLogoutCircleRLine, RiMenu3Line, RiCloseLine, RiStackFill } from "react-icons/ri";
 
-import axios from 'axios'
-import { Global } from '../../../helper/Global'
-
-import { logo_white } from '../../shared/Images'
+import { logo_white } from "../../shared/Images";
 
 const SideBar = (): JSX.Element => {
-  const { setAuth, setLoading } = useAuth()
-  const token = localStorage.getItem('token')
-  const [showMenu, setShowMenu] = useState(false)
-  const navigate = useNavigate()
+  const { logout, setLoading } = useAuth();
+  const [showMenu, setShowMenu] = useState(false);
+  const navigate = useNavigate();
 
   const cerrarSession = async (): Promise<void> => {
-    setLoading(true)
-    const data = new FormData()
-    data.append('_method', 'POST')
-
-    await axios.post(`${Global.url}/logout`, data, {
-      headers: {
-        Authorization: `Bearer ${token !== null && token !== '' ? token : ''}`
-      }
-    })
-    localStorage.clear()
-    setAuth({
-      id: '',
-      name: '',
-      email: '',
-      idRol: null
-    })
-    navigate('/login')
-    setLoading(false)
-  }
+    setLoading(true);
+    logout();
+    navigate("/login");
+    setLoading(false);
+  };
 
   return (
     <>
       <div
         className={`fixed xl:static w-[80%] md:w-[40%] lg:w-[30%] xl:w-auto h-full top-0 bg-primary shadow-xl p-4 flex flex-col justify-between z-50 ${
-          showMenu ? 'left-0' : '-left-full'
+          showMenu ? "left-0" : "-left-full"
         } transition-all`}
       >
         <div>
@@ -83,10 +60,34 @@ const SideBar = (): JSX.Element => {
             </li>
             <li>
               <Link
+                to="banner-principal"
+                className="flex items-center gap-4 px-4 py-2 text-white transition-colors rounded-lg hover:bg-secondary-900"
+              >
+                <RiStackFill className="text-main" /> Banner Principal
+              </Link>
+            </li>
+            <li>
+              <Link
                 to="servicios-categoria"
                 className="flex items-center gap-4 px-4 py-2 text-white transition-colors rounded-lg hover:bg-secondary-900"
               >
                 <RiStackFill className="text-main" /> Servicio Categoria
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="servicios-adicional"
+                className="flex items-center gap-4 px-4 py-2 text-white transition-colors rounded-lg hover:bg-secondary-900"
+              >
+                <RiStackFill className="text-main" /> Servicio Adicional
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="trabajo"
+                className="flex items-center gap-4 px-4 py-2 text-white transition-colors rounded-lg hover:bg-secondary-900"
+              >
+                <RiStackFill className="text-main" /> Pasos de Trabajo
               </Link>
             </li>
             <li>
@@ -97,13 +98,21 @@ const SideBar = (): JSX.Element => {
                 <RiStackFill className="text-main" /> Proyectos
               </Link>
             </li>
+            {/* <li>
+              <Link
+                to="editables"
+                className="flex items-center gap-4 px-4 py-2 text-white transition-colors rounded-lg hover:bg-secondary-900"
+              >
+                <RiStackFill className="text-main" /> Editables
+              </Link>
+            </li> */}
           </ul>
         </div>
         <nav>
           <Link
-            to={''}
+            to={""}
             onClick={() => {
-              void cerrarSession()
+              void cerrarSession();
             }}
             className="flex items-center gap-4 px-4 py-2 transition-colors rounded-lg hover:bg-main_2-100 text-main hover:text-main"
           >
@@ -113,14 +122,14 @@ const SideBar = (): JSX.Element => {
       </div>
       <button
         onClick={() => {
-          setShowMenu(!showMenu)
+          setShowMenu(!showMenu);
         }}
         className="fixed z-50 p-3 text-white rounded-full xl:hidden bottom-4 right-4 bg-main"
       >
         {showMenu ? <RiCloseLine /> : <RiMenu3Line />}
       </button>
     </>
-  )
-}
+  );
+};
 
-export default SideBar
+export default SideBar;

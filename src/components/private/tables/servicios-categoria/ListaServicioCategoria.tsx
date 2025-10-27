@@ -4,12 +4,15 @@ import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import type { ServicioCategoriaResponse } from "./interfaces/servicio-cateogira.response";
 import { getAllServicioCategoria } from "./actions/getAllServiciosCategorias.action";
 import { deleteServicioCategoria } from "./actions/deleteServicioCategoria.action";
+import Swal from "sweetalert2";
+import useAuth from "../../../../hooks/useAuth";
 
 export const ListaServicioCategoria = (): JSX.Element => {
   const navigate = useNavigate();
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [serviciosCategorias, setServiciosCategorias] = useState<ServicioCategoriaResponse[]>([]);
   const [loadingComponents, setLoadingComponents] = useState(false);
+  const { setTitle } = useAuth();
 
   const getAllProductos = async () => {
     setLoadingComponents(true);
@@ -20,22 +23,44 @@ export const ListaServicioCategoria = (): JSX.Element => {
   };
 
   const handleDelete = async (id: string) => {
-    const confirmar = window.confirm("¿Seguro que deseas eliminar esta categoría?");
-    if (!confirmar) return;
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará la categoría permanentemente.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       await deleteServicioCategoria(id);
       setServiciosCategorias((prev) => prev.filter((item) => item.id !== id));
       setTotalRegistros((prev) => prev - 1);
-      alert("Categoría eliminada correctamente ✅");
+
+      Swal.fire({
+        icon: "success",
+        title: "Eliminado",
+        text: "La categoría ha sido eliminada correctamente.",
+        timer: 1500,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error("Error al eliminar:", error);
-      alert("❌ Error al eliminar la categoría");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Ocurrió un error al eliminar la categoría.",
+      });
     }
   };
 
   useEffect(() => {
     getAllProductos();
+    setTitle("Categorias");
   }, []);
 
   return (

@@ -7,12 +7,14 @@ import "@szhsin/react-menu/dist/index.css";
 import { TopControls } from "../shared/TopControls";
 import { getAllProjectsByCategoryIdAction } from "./actions/getAllProjectsByCategoryId.action";
 import type { ProyectoResponse } from "./interfaces/project.response";
+import useAuth from "../../../../../hooks/useAuth";
 
 export const ListaProyectos = (): JSX.Element => {
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [proyectos, setProyectos] = useState<ProyectoResponse[]>([]);
   const [loadingComponents, setLoadingComponents] = useState(false);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<string>("");
+  const { setTitle } = useAuth();
 
   const fetchProyectos = async (categoriaId: string) => {
     setLoadingComponents(true);
@@ -36,6 +38,7 @@ export const ListaProyectos = (): JSX.Element => {
   };
 
   useEffect(() => {
+    setTitle("Proyectos");
     fetchProyectos(categoriaSeleccionada);
   }, []);
 
@@ -43,14 +46,14 @@ export const ListaProyectos = (): JSX.Element => {
     fetchProyectos(categoriaSeleccionada);
   }, [categoriaSeleccionada]);
 
-  const handleDelete = (id: string) => {
-    const confirmar = window.confirm("¿Seguro que deseas eliminar este proyecto?");
-    if (!confirmar) return;
+  // const handleDelete = (id: string) => {
+  //   const confirmar = window.confirm("¿Seguro que deseas eliminar este proyecto?");
+  //   if (!confirmar) return;
 
-    setProyectos((prev) => prev.filter((item) => item.id !== id));
-    setTotalRegistros((prev) => prev - 1);
-    alert("Proyecto eliminado correctamente ✅");
-  };
+  //   setProyectos((prev) => prev.filter((item) => item.id !== id));
+  //   setTotalRegistros((prev) => prev - 1);
+  //   alert("Proyecto eliminado correctamente ✅");
+  // };
 
   return (
     <>
@@ -72,38 +75,40 @@ export const ListaProyectos = (): JSX.Element => {
                     alt={pro.titulo}
                     className="object-cover w-full h-full"
                   />
-                  <div className="absolute top-2 right-2">
-                    <Menu
-                      menuButton={
-                        <MenuButton className="p-2 transition-colors rounded-lg bg-secondary-100/80 backdrop-blur-sm hover:bg-secondary-100">
-                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                          </svg>
-                        </MenuButton>
-                      }
-                      align="end"
-                      arrow
-                      transition
-                      menuClassName="bg-secondary-100 p-4"
-                    >
-                      <MenuItem className="p-0 hover:bg-transparent">
-                        <Link
-                          to={`editar/${pro.id}`}
-                          className="flex items-center flex-1 p-2 text-gray-300 transition-colors rounded-lg hover:bg-secondary-900 gap-x-4"
-                        >
-                          Editar
-                        </Link>
-                      </MenuItem>
-                      <MenuItem className="p-0 hover:bg-transparent">
+                  {categoriaSeleccionada && (
+                    <div className="absolute top-2 right-2">
+                      <Menu
+                        menuButton={
+                          <MenuButton className="p-2 transition-colors rounded-lg bg-secondary-100/80 backdrop-blur-sm hover:bg-secondary-100">
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                            </svg>
+                          </MenuButton>
+                        }
+                        align="end"
+                        arrow
+                        transition
+                        menuClassName="bg-secondary-100 p-4"
+                      >
+                        <MenuItem className="p-0 hover:bg-transparent">
+                          <Link
+                            to={`${categoriaSeleccionada}/editar/${pro.id}`}
+                            className="flex items-center flex-1 p-2 text-gray-300 transition-colors rounded-lg hover:bg-secondary-900 gap-x-4"
+                          >
+                            Editar
+                          </Link>
+                        </MenuItem>
+                        {/* <MenuItem className="p-0 hover:bg-transparent">
                         <button
                           onClick={() => handleDelete(pro.id)}
                           className="flex items-center flex-1 p-2 text-gray-300 transition-colors rounded-lg hover:bg-secondary-900 gap-x-4 w-full text-left"
                         >
                           Eliminar
                         </button>
-                      </MenuItem>
-                    </Menu>
-                  </div>
+                      </MenuItem> */}
+                      </Menu>
+                    </div>
+                  )}
                 </div>
                 <div className="p-4">
                   <h3 className="mb-2 text-lg font-semibold text-white truncate">{pro.titulo}</h3>

@@ -1,53 +1,54 @@
-import { useEffect, useState } from 'react'
-import '@szhsin/react-menu/dist/index.css'
-import '@szhsin/react-menu/dist/transitions/slide.css'
-import useAuth from '../../../hooks/useAuth'
-import axios from 'axios'
-import { Global } from '../../../helper/Global'
-import { Loading } from '../../shared/Loading'
-import CardTicket from '../../shared/CardTicket'
+import { useEffect, useState } from "react";
+import "@szhsin/react-menu/dist/index.css";
+import "@szhsin/react-menu/dist/transitions/slide.css";
+import useAuth from "../../../hooks/useAuth";
+import axios from "axios";
+import { Global } from "../../../helper/Global";
+import { Loading } from "../../shared/Loading";
+import CardTicket from "../../shared/CardTicket";
 
 const Home = (): JSX.Element => {
-  const [mensaje, setMensaje] = useState('')
-  const { auth, setTitle } = useAuth()
-  const [categorias, setCategorias] = useState(0)
-  const [loading, setLoading] = useState(false)
+  const [mensaje, setMensaje] = useState("");
+  const { user, setTitle } = useAuth();
+  const [categorias, setCategorias] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const getAllCategories = async (): Promise<void> => {
-    setLoading(true)
-    const request = await axios.get(`${Global.url}/allServicios`)
-    setCategorias(request.data.length)
-    setLoading(false)
-  }
+    setLoading(true);
+    const request = await axios.get(`${Global.url}/allServicios`);
+    setCategorias(request.data.length);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fecha = new Date()
-    const hora = fecha.getHours()
+    const fecha = new Date();
+    const hora = fecha.getHours();
 
     if (hora >= 6 && hora < 12) {
-      setMensaje('¡Buenos días!')
+      setMensaje("¡Buenos días!");
     } else if (hora >= 12 && hora < 20) {
-      setMensaje('¡Buenas tardes!')
+      setMensaje("¡Buenas tardes!");
     } else {
-      setMensaje('¡Buenas noches!')
+      setMensaje("¡Buenas noches!");
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    setTitle('')
-    getAllCategories()
-  }, [])
+    setTitle("");
+    getAllCategories();
+  }, []);
 
   return (
     <div>
       <div className="flex items-center justify-between mb-10">
         <h1 className="text-2xl text-white md:text-4xl">
-          {mensaje}, {auth.name}!
+          {mensaje}, {user?.nombre}!
         </h1>
       </div>
-      {loading
-        ? <Loading />
-        : <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {/* Card */}
 
           <CardTicket
@@ -75,9 +76,9 @@ const Home = (): JSX.Element => {
             text="Tickets en proceso"
           /> */}
         </div>
-      }
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

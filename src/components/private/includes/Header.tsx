@@ -1,39 +1,21 @@
-import { RiArrowDownSLine, RiLogoutCircleRLine } from 'react-icons/ri'
-import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu'
-import '@szhsin/react-menu/dist/index.css'
-import '@szhsin/react-menu/dist/transitions/slide.css'
-import { Link, useNavigate } from 'react-router-dom'
-import useAuth from '../../../hooks/useAuth'
-import icono from './../../../assets/images/logos/icone.png'
-import axios from 'axios'
-import { Global } from '../../../helper/Global'
+import { RiArrowDownSLine, RiLogoutCircleRLine } from "react-icons/ri";
+import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
+import "@szhsin/react-menu/dist/index.css";
+import "@szhsin/react-menu/dist/transitions/slide.css";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../../../hooks/useAuth";
+import icono from "./../../../assets/images/logos/icone.png";
 
 const Header = (): JSX.Element => {
-  const { auth, setLoading, setAuth, title } = useAuth()
-  const navigate = useNavigate()
+  const { user, setLoading, logout, title } = useAuth();
+  const navigate = useNavigate();
 
   const cerrarSession = async (): Promise<void> => {
-    setLoading(true)
-    const token = localStorage.getItem('token')
-
-    const data = new FormData()
-    data.append('_method', 'POST')
-
-    await axios.post(`${Global.url}/logout`, data, {
-      headers: {
-        Authorization: `Bearer ${token !== null && token !== '' ? token : ''}`
-      }
-    })
-    localStorage.clear()
-    setAuth({
-      id: '',
-      name: '',
-      email: '',
-      idRol: null
-    })
-    navigate('/login')
-    setLoading(false)
-  }
+    setLoading(true);
+    logout();
+    navigate("/login");
+    setLoading(false);
+  };
 
   return (
     <header className="h-[7vh] md:h-[10vh] border-b border-secondary-100 p-8 flex items-center justify-between">
@@ -44,11 +26,8 @@ const Header = (): JSX.Element => {
         <Menu
           menuButton={
             <MenuButton className="flex items-center gap-x-2 hover:bg-secondary-100 p-2 rounded-lg transition-colors">
-              <img
-                src={icono}
-                className="w-6 h-6 object-contain rounded-full"
-              />
-              <span>{auth.name}</span>
+              <img src={icono} className="w-6 h-6 object-contain rounded-full" />
+              <span>{user?.name}</span>
               <RiArrowDownSLine />
             </MenuButton>
           }
@@ -62,13 +41,10 @@ const Header = (): JSX.Element => {
               to="/perfil"
               className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 py-2 px-6 flex-1"
             >
-              <img
-                src={icono}
-                className="w-8 h-8 object-contain rounded-full"
-              />
+              <img src={icono} className="w-8 h-8 object-contain rounded-full" />
               <div className="flex flex-col text-sm">
-                <span className="text-sm">{auth.name}</span>
-                <span className="text-xs text-gray-500">{auth.email}</span>
+                <span className="text-sm">{user?.name}</span>
+                <span className="text-xs text-gray-500">{user?.email}</span>
               </div>
             </Link>
           </MenuItem>
@@ -78,7 +54,7 @@ const Header = (): JSX.Element => {
             <Link
               to=""
               onClick={() => {
-                void cerrarSession()
+                void cerrarSession();
               }}
               className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 py-2 px-6 flex-1"
             >
@@ -88,7 +64,7 @@ const Header = (): JSX.Element => {
         </Menu>
       </nav>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
