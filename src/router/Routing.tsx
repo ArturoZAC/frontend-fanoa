@@ -30,6 +30,12 @@ import { ListaTrabajo } from "../components/private/tables/admin/trabajo/ListaTr
 import { CrearTrabajo } from "../components/private/tables/admin/trabajo/CrearTrabajo";
 import { EditarTrabajo } from "../components/private/tables/admin/trabajo/EditarTrabajo";
 import { Editables } from "../components/private/tables/admin/editables/Editables";
+import { ListaMarcas } from "../components/private/tables/admin/marcas/ListaMarcas";
+import { CrearMarcas } from "../components/private/tables/admin/marcas/CrearMarcas";
+import { EditarMarcas } from "../components/private/tables/admin/marcas/EditarMarcas";
+import { ListaBannerSecundario } from "../components/private/tables/admin/banner-secundario/ListaBannerSecundatio";
+import { CrearBannerSecundario } from "../components/private/tables/admin/banner-secundario/CrearBannerSecundario";
+import { EditarBannerSecundario } from "../components/private/tables/admin/banner-secundario/EditarBannerSecundario";
 
 export const Routing = (): JSX.Element => {
   return (
@@ -70,7 +76,15 @@ export const Routing = (): JSX.Element => {
             <Route path="proyectos/agregar/:id" element={<CrearProyecto />} />
             <Route path="proyectos/:categoriaId/editar/:id" element={<EditarProyecto />} />
 
-            {/* <Route path="editables" element={<Editables />} /> */}
+            <Route path="editables" element={<Editables />} />
+
+            <Route path="marcas" element={<ListaMarcas />} />
+            <Route path="marcas/agregar" element={<CrearMarcas />} />
+            <Route path="marcas/editar/:id" element={<EditarMarcas />} />
+
+            <Route path="banner-secundario" element={<ListaBannerSecundario />} />
+            <Route path="banner-secundario/agregar" element={<CrearBannerSecundario />} />
+            <Route path="banner-secundario/editar/:id" element={<EditarBannerSecundario />} />
 
             {/* CONFIGURACION */}
             <Route path="contacto/:id" element={<CrearCliente />} />

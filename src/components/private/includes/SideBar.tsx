@@ -98,14 +98,30 @@ const SideBar = (): JSX.Element => {
                 <RiStackFill className="text-main" /> Proyectos
               </Link>
             </li>
-            {/* <li>
+            <li>
               <Link
                 to="editables"
                 className="flex items-center gap-4 px-4 py-2 text-white transition-colors rounded-lg hover:bg-secondary-900"
               >
                 <RiStackFill className="text-main" /> Editables
               </Link>
-            </li> */}
+            </li>
+            <li>
+              <Link
+                to="marcas"
+                className="flex items-center gap-4 px-4 py-2 text-white transition-colors rounded-lg hover:bg-secondary-900"
+              >
+                <RiStackFill className="text-main" /> Marcas
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="banner-secundario"
+                className="flex items-center gap-4 px-4 py-2 text-white transition-colors rounded-lg hover:bg-secondary-900"
+              >
+                <RiStackFill className="text-main" /> Banner Secundario
+              </Link>
+            </li>
           </ul>
         </div>
         <nav>
